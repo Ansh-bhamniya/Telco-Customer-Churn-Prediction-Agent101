@@ -37,8 +37,19 @@ Achieve ≥ 0.83 ROC AUC score on the 20% validation split (measured using 'pred
 **Note**:  
 The model is evaluated using ROC AUC score calculated independently by the test suite using 'predict_proba()' output (column 1) and true labels from the held-out test set.
 
-Once your model is complete, write the entire class `ChurnPredictor` (along with all necessary imports and helper functions) into the file '/results/utils.py'.  
-Make sure to create the directory '/results' if it does not exist.
+
+
+
+**Critical Final Step — MUST DO**:
+After completing and testing your model in the notebook:
+- Run ALL cells to verify everything works.
+- **MANDATORY**: Execute the last cell to create the '/results' directory (if it doesn't exist) and **write the entire ChurnPredictor class (with all imports and helper functions)** to the file '/results/utils.py'.
+- This file **MUST** be created — the verifier will load it directly and test it.
+- Do NOT skip this step — if /results/utils.py is missing, all tests will fail.
+- Confirm by printing: "Successfully wrote ChurnPredictor to /results/utils.py"
+
+
+
 
 The model will be directly loaded from the python file and used as below (rough code):
 
