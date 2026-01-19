@@ -1,18 +1,115 @@
-mkdir -p /results
+def test_file_exists():
+    """
+    Verify that the utils.py file exists at the expected location.
+    """
+    source_path = Path("/results/utils.py")
+    assert source_path.exists(), f"Source file '{source_path}' does not exist."
 
-cat > /results/utils.py << 'EOF'
-class ChurnPredictor:
-    def __init__(self):
-        pass
 
-    def fit(self, train_df):
-        print("Dummy fit")
-        pass
+def test_class_structure(predictor_class):
+    """
+    Verify that the ChurnPredictor class has the required methods.
+    """
+    ChurnPredictor = predictor_class
 
-    def predict(self, df):
-        return np.zeros(len(df))
+    # Test instantiation
+    model = ChurnPredictor()
 
-    def predict_proba(self, df):
-        n = len(df)
-        return np.column_stack([np.ones(n) * 0.3, np.ones(n) * 0.7])
-EOF
+    # Check required methods exist
+    assert hasattr(model, 'fit'), "Model must have 'fit' method"
+    assert hasattr(model, 'predict'), "Model must have 'predict' method"
+    assert hasattr(model, 'predict_proba'), "Model must have 'predict_proba' method"
+
+    # Check methods are callable
+    assert callable(model.fit), "'fit' must be callable"
+    assert callable(model.predict), "'predict' must be callable"
+    assert callable(model.predict_proba), "'predict_proba' must be callable"
+
+
+def test_model_training(predictor_class, churn_data):
+    """
+    Verify that the model can be trained without errors.
+    """
+    ChurnPredictor = predictor_class
+    df_train, df_test = churn_data
+
+    model = ChurnPredictor()
+
+    # Training should complete without exception
+    try:
+        model.fit(df_train)
+    except Exception as e:
+        pytest.fail(f"Model training failed with error: {e}")
+
+
+
+def test_predict_method(trained_model):
+    """
+    Verify that the predict() method returns valid binary predictions.
+    """
+    model, df_train, df_test = trained_model
+
+    # Get predictions
+    y_pred = model.predict(df_test.drop('Churn', axis=1))
+
+    # Check output shape
+    assert len(y_pred) == len(df_test), f"Prediction length {len(y_pred)} doesn't match test data length {len(df_test)}"
+
+    # Check binary output
+    unique_values = set(y_pred)
+    assert unique_values.issubset({0, 1}), f"Predictions must be binary (0 or 1), got {unique_values}"
+
+    # Check output type
+    assert isinstance(y_pred, (np.ndarray, list)), "Predictions must be array-like"
+
+
+def test_predict_proba_method(trained_model):
+    """
+    Verify that the predict_proba() method returns valid probability arrays.
+    """
+    model, df_train, df_test = trained_model
+
+    # Get probability predictions
+    y_pred_proba = model.predict_proba(df_test.drop('Churn', axis=1))
+
+    # Check output shape
+    assert y_pred_proba.shape == (len(df_test), 2), \
+        f"predict_proba must return shape (n_samples, 2), got {y_pred_proba.shape}"
+
+    # Check probabilities are in valid range [0, 1]
+    assert np.all((y_pred_proba >= 0) & (y_pred_proba <= 1)), \
+        "All probabilities must be between 0 and 1"
+
+    # Check probabilities sum to 1 for each sample
+    prob_sums = y_pred_proba.sum(axis=1)
+    assert np.allclose(prob_sums, 1.0, atol=1e-5), \
+        "Probabilities for each sample must sum to 1"
+
+
+
+def test_model_performance(trained_model):
+    """
+    Verify that the model achieves the required ROC AUC performance (>= 0.83).
+    """
+    model, df_train, df_test = trained_model
+
+    # Map target to binary (Yes → 1, No → 0)
+    y_true = (df_test['Churn'] == 'Yes').astype(int)
+
+    # Get predicted probabilities (positive class = churn)
+    y_pred_proba = model.predict_proba(df_test.drop('Churn', axis=1))[:, 1]
+
+    # Calculate ROC AUC
+    roc_auc = roc_auc_score(y_true, y_pred_proba)
+
+    target_roc_auc = 0.83
+
+    print(f"Model ROC AUC Score: {roc_auc:.4f}")  # Visible with pytest -s
+
+    # Check ROC AUC is in valid range
+    assert 0.0 <= roc_auc <= 1.0, f"ROC AUC must be in [0, 1], got {roc_auc:.4f}"
+
+    # Check ROC AUC meets minimum threshold
+    assert roc_auc >= target_roc_auc, \
+        f"Performance Failure: Model ROC AUC ({roc_auc:.4f}) is below the " \
+        f"required threshold of {target_roc_auc} (83%)"
