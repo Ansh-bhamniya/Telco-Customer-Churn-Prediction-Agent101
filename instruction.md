@@ -20,4 +20,4 @@ Required Outputs:
 1 file: `/results/utils.py` containing class 'ChurnPredictor' with exactly these methods:
 - fit(self, train_df: pd.DataFrame): Train on full dataframe (including 'Churn'). Internally split into 80% training and 20% validation. Train on 80% and evaluate on 20% validation split.
 - predict(self, X: pd.DataFrame): Return binary prediction (0/1) as NumPy array or list
-- predict_proba(self, X: pd.DataFrame): Return probabilities as NumPy array of shape (n_samples, 2), where column 1 contains probabilities for class 1 (churn)
+- predict_proba(self, X: pd.DataFrame): Return probabilities as NumPy array of shape (n_samples, 2), where column index 1 contains probabilities for class 1 (churn)
