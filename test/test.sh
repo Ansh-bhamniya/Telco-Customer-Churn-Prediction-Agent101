@@ -20,7 +20,7 @@ if [ "$PWD" = "/" ]; then
     exit 1
 fi
 
-pip install pytest==8.4.1 pytest-json==0.3.5 litellm==1.80.9
+pip install pytest==8.4.1 pytest-json==0.3.3 litellm==1.80.9
 
 echo "===================================="
 echo "STEP 1: Dumping notebook variables"
