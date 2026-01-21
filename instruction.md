@@ -1,40 +1,23 @@
+# Telecom Customer Churn Prediction
 
-You are solving a customer churn prediction task for a telecom company.
+You are given a dataset of customer subscription and service usage records for a telecom company in the directory `data/`. The directory consists of:
 
+* **train.csv**: Contains columns `['customerID', 'gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', 'MonthlyCharges', 'TotalCharges', 'Churn']`.
+* **test.csv**: Contains only the features `['customerID', 'gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', 'MonthlyCharges', 'TotalCharges']`. **The target 'Churn' column has been removed for evaluation.**
 
+**Goal**: Achieve a ROC-AUC score greater than 0.83 on the test dataset.
 
-**Task:**
-- Training data: `/workspace/data/train.csv`
-- Goal: Train a model to predict which customers will churn
-- Target: Achieve ROC AUC score >= 0.83
+### Deliverables
 
-**Simple Steps:**
-1. Load training data from `/workspace/data/train.csv`
-2. Handle data issues (convert TotalCharges to numeric, handle missing values)
-3. Split data: 80% for training, 20% for validation
-4. Preprocess: Encode categorical variables, scale numeric features
-5. Train a model (RandomForestClassifier or XGBoost)
-6. Evaluate on validation set (ROC AUC should be >= 0.83)
+Complete the class `ChurnPredictor` in the initial notebook. Once the model is complete, **write the entire class** along with necessary imports into the file `/results/utils.py`. Make sure to create the directory `/results` if it does not exist.
 
-**Required Output:**
-Create `/results/utils.py` with:
-- All necessary imports
-- A class with `fit()`, `predict()`, and `predict_proba()` methods
+* Your class must handle `fit(X, y)` and `predict(X)` taking DataFrames as input.
+* **Robustness**: Your model must automatically ignore any extra or "garbage" columns present in the input DataFrame during prediction.
+* The model will be instantiated and tested automatically:
 
-**Output Format:**
-When you print results, show only two columns:
-- Column 1: Sample ID or index
-- Column 2: Prediction result (0 or 1 for churn)
+    ```python
+    from utils import ChurnPredictor
 
-Example output:
-```
-ID    Prediction
-0     0
-1     1
-2     0
-```
-
-**Constraints:**
-- Use only available libraries (pandas, scikit-learn, numpy, etc.)
-- No new installations
-- Export your class to `/results/utils.py`
+    model = ChurnPredictor()  # Ensure default arguments work
+    model.fit(X_train, y_train)
+    ```

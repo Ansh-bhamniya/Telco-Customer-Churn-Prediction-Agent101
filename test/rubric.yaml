@@ -1,0 +1,11 @@
+version: 1.0
+criteria:
+  - name: Model Accuracy
+    description: >
+      The model must achieve a ROC-AUC score greater than 0.83 on the hidden test set.
+    verified_by: test_performance_roc_auc
+
+  - name: Robustness
+    description: >
+      The model must be able to handle input DataFrames containing extra "garbage" columns without raising an error or crashing.
+    verified_by: test_robustness_garbage_columns
