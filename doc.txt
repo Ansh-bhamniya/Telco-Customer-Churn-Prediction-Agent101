@@ -1,0 +1,119 @@
+Below is a **project report in the same template/style** as your reference file, but rewritten for the **Telco Customer Churn Prediction** task using the details you provided.
+
+---
+
+## **Task Definition:**
+
+You are a Machine Learning Engineer building a customer churn prediction model using a telecom dataset in the directory (`/workspace/data/`), containing customer demographics, subscription details, and service usage behavior.
+
+The dataset includes:
+
+* **train.csv**: contains all feature columns + the target column **`Churn`**
+* **test.csv**: contains only feature columns (the **`Churn`** column is removed for evaluation)
+
+---
+
+## **The Situation:**
+
+The telecom company wants to proactively identify customers likely to churn so that retention strategies (discounts, bundles, support prioritization) can be applied early.
+
+However, the dataset includes:
+
+* **Mixed categorical and numerical columns**
+* **Non-trivial preprocessing requirements**
+* A target label (`Churn`) that is removed in the test set to simulate real-world deployment settings
+
+---
+
+## **Your Objective:**
+
+1. Train a model on the training dataset (`train.csv`)
+2. Predict churn probability for customers in the test dataset (`test.csv`)
+3. Ensure your model achieves strong ranking performance on the hidden evaluation set
+
+---
+
+## **Constraints:**
+
+1. **Performance Requirement:**
+
+   * Must achieve **ROC-AUC > 0.83** on the hidden test set.
+2. **Robustness Requirement:**
+
+   * Your model must ignore extra / garbage columns in the input DataFrame during prediction without crashing.
+3. **Standardized Interface:**
+
+   * The submission must implement the class `ChurnPredictor` with:
+
+     * `fit(X, y)`
+     * `predict(X)`
+
+---
+
+## **Required Outputs:**
+
+1. A complete working class:
+
+   * **`ChurnPredictor`**
+2. The final implementation must be written to:
+
+   * **`/results/utils.py`**
+
+---
+
+## **Task Link**
+
+**telecom_customer_churn_prediction**
+
+---
+
+## **Why is this a good task?**
+
+This task is a strong benchmark because it tests whether agents can build a **realistic production-style ML pipeline**, not just a quick model.
+
+* **Real-world preprocessing challenge**: agents must handle categorical encoding, missing values, and numerical conversion (e.g., `TotalCharges` often appears as a string).
+* **Robustness requirement** punishes fragile solutions that crash when extra columns appear.
+* **Evaluation is clean and objective**: ROC-AUC is a strong metric for churn classification and ranking customers by churn probability.
+* **Deployability**: having `fit(X, y)` + `predict(X)` mimics an actual ML system API.
+
+---
+
+## **Pass@k**
+
+Considered **k = 5**
+
+* **Gemini 3 Pro – pass@5 = 5**
+* **GPT – pass@5 = 2**
+
+---
+
+## **Why did GPT fail?**
+
+Based on the analysis of failed trajectories:
+
+* In multiple attempts, the model did not meet the **ROC-AUC > 0.83** threshold due to weak preprocessing or suboptimal modeling choices.
+* Some runs failed because of incorrect handling of categorical variables (e.g., missing one-hot encoding or failing on unseen categories).
+* Other failures were caused by improper handling of data types such as `TotalCharges`, leading to NaNs or model instability and reduced accuracy.
+
+---
+
+## **Why did Gemini 3 Pro succeed?**
+
+Gemini 3 Pro consistently succeeded because:
+
+* It handled preprocessing reliably (categorical encoding, missing value handling, numeric conversion).
+* It produced stable churn probability predictions suitable for ROC-AUC scoring.
+* It did not crash during inference and consistently handled real-world quirks in the input data.
+
+---
+
+## **Conclusion**
+
+The Telco Customer Churn Prediction task is an excellent benchmark for measuring whether an agent can deliver **end-to-end ML pipeline execution** under strict evaluation conditions.
+
+Gemini 3 Pro achieved **perfect pass@5 = 5**, successfully meeting both accuracy (**ROC-AUC > 0.83**) and robustness requirements.
+In contrast, GPT only passed **2/5** runs, mainly failing due to weaker preprocessing and difficulty meeting the strict ROC-AUC target.
+
+---
+
+If you want, I can also format this into a **clean PDF-style report**, or convert it into a **Markdown file** exactly like a benchmark submission doc.
