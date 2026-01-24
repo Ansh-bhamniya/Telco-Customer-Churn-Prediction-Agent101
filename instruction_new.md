@@ -43,4 +43,3 @@ Return the following:
 ## Variable Serialization
 
 Convert `churn_counts` DataFrame to a dictionary using `to_dict(orient='split')` before the end of your notebook.
-
