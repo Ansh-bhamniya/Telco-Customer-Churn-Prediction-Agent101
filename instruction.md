@@ -1,6 +1,7 @@
 # Telecom Customer Churn Prediction
 
-You are given a dataset of customer subscription and service usage records for a telecom company in the directory `data/`. The directory consists of:
+You are given a dataset of customer subscription and service usage records for a telecom company in the directory `data/`. 
+The directory consists of:
 
 * **train.csv**: Contains columns `['customerID', 'gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', 'MonthlyCharges', 'TotalCharges', 'Churn']`.
 * **test.csv**: Contains only the features `['customerID', 'gender', 'SeniorCitizen', 'Partner', 'Dependents', 'tenure', 'PhoneService', 'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling', 'PaymentMethod', 'MonthlyCharges', 'TotalCharges']`. **The target 'Churn' column has been removed for evaluation.**
